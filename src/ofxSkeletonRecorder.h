@@ -31,14 +31,22 @@ public:
 		xml.setValue("found",bFound);
 		xml.popTag();
 	}
+
+	void loadFromXml(ofxXmlSettings & xml,string type){
+		xml.pushTag(type);
+		x = xml.getValue("posX",-1);
+		y = xml.getValue("posY",-1);
+		bFound = xml.getValue("found",false);
+		xml.popTag();
+	}
 };
 
 struct SkeletonData{
 	LimbData head;
-	LimbData leftShoulder, leftElbow, leftHand;
-	LimbData rightShoulder, rightElbow, rightHand;
-//	ofPoint * leftShoulder, * leftElbow, * leftHand;
-//	ofPoint * leftShoulder, * leftElbow, * leftHand;
+	LimbData leftUpperTorso, leftElbow, leftHand;
+	LimbData rightUpperTorso, rightElbow, rightHand;
+	LimbData leftLowerTorso, leftKnee, leftFoot;
+	LimbData rightLowerTorso, rightKnee, rightFoot;
 };
 
 class ofxSkeletonRecorder {
@@ -52,8 +60,12 @@ public:
 
 	void drawSkeleton(float x = 0, float y = 0);
 
-	void saveFrameToXml(int frame);
+	void saveFrameToXml(int frame, int timeMS);
+	void loadFrameFromXml(int frame);
+	void updateFrameToXml(int frame);
+
 	void saveXmlToFile(string filename);
+	void loadXmlFile(string filename);
 
 protected:
 	SkeletonData skeleton;
