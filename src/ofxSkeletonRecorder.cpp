@@ -21,20 +21,17 @@ void ofxSkeletonRecorder::drawSkeleton(float x, float y){
 	ofPushMatrix();
 	ofTranslate(x,y);
 
-	ofSetColor(255,0,0);
 	skeleton.head.draw();
 	skeleton.leftHand.draw();
 	skeleton.rightHand.draw();
 	skeleton.leftFoot.draw();
 	skeleton.rightFoot.draw();
 
-	ofSetColor(0,255,0);
 	skeleton.leftElbow.draw();
 	skeleton.rightElbow.draw();
 	skeleton.leftKnee.draw();
 	skeleton.rightKnee.draw();
 
-	ofSetColor(0,0,255);
 	skeleton.leftUpperTorso.draw();
 	skeleton.rightUpperTorso.draw();
 	skeleton.leftLowerTorso.draw();
@@ -95,7 +92,26 @@ void ofxSkeletonRecorder::loadFrameFromXml(int frame){
 }
 
 void ofxSkeletonRecorder::updateFrameToXml(int frame){
+	xml.pushTag("frame",frame);
 
+	skeleton.head.updateToXml(xml,"head");
+
+	skeleton.leftHand.updateToXml(xml,"leftHand");
+	skeleton.leftElbow.updateToXml(xml,"leftElbow");
+	skeleton.leftUpperTorso.updateToXml(xml,"leftUpperTorso");
+
+	skeleton.rightHand.updateToXml(xml,"rightHand");
+	skeleton.rightElbow.updateToXml(xml,"rightElbow");
+	skeleton.rightUpperTorso.updateToXml(xml,"rightUpperTorso");
+
+	skeleton.leftFoot.updateToXml(xml,"leftFoot");
+	skeleton.leftKnee.updateToXml(xml,"leftKnee");
+	skeleton.leftLowerTorso.updateToXml(xml,"leftLowerTorso");
+
+	skeleton.rightFoot.updateToXml(xml,"rightFoot");
+	skeleton.rightKnee.updateToXml(xml,"rightKnee");
+	skeleton.rightLowerTorso.updateToXml(xml,"rightLowerTorso");
+	xml.popTag();
 }
 
 void ofxSkeletonRecorder::saveXmlToFile(string filename){
