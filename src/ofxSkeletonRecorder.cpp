@@ -7,13 +7,86 @@
 
 #include "ofxSkeletonRecorder.h"
 
-ofxSkeletonRecorder::ofxSkeletonRecorder() {
-	// TODO Auto-generated constructor stub
 
+//=================== SKELETON DATA =====================
+
+SkeletonData::SkeletonData(){
+	skeletonPoints.push_back(&head);
+	head.color.set(255,0,0);
+
+	skeletonPoints.push_back(&leftUpperTorso);
+	leftUpperTorso.color.set(0,255,255);
+	skeletonPoints.push_back(&leftElbow);
+	leftElbow.color.set(0,255,0);
+	skeletonPoints.push_back(&leftHand);
+	leftHand.color.set(255,0,0);
+
+	skeletonPoints.push_back(&rightUpperTorso);
+	rightUpperTorso.color.set(0,255,255);
+	skeletonPoints.push_back(&rightElbow);
+	rightElbow.color.set(0,255,0);
+	skeletonPoints.push_back(&rightHand);
+	rightHand.color.set(255,0,0);
+
+	skeletonPoints.push_back(&leftLowerTorso);
+	leftLowerTorso.color.set(0,255,255);
+	skeletonPoints.push_back(&leftKnee);
+	leftKnee.color.set(0,255,0);
+	skeletonPoints.push_back(&leftFoot);
+	leftFoot.color.set(255,0,0);
+
+	skeletonPoints.push_back(&rightLowerTorso);
+	rightLowerTorso.color.set(0,255,255);
+	skeletonPoints.push_back(&rightKnee);
+	rightKnee.color.set(0,255,0);
+	skeletonPoints.push_back(&rightFoot);
+	rightFoot.color.set(255,0,0);
+}
+
+//================= SKELETON RECORDER ===================
+
+ofxSkeletonRecorder::ofxSkeletonRecorder() {
+	bPlay = true;
+	bUpdate = false;
 }
 
 ofxSkeletonRecorder::~ofxSkeletonRecorder() {
 	// TODO Auto-generated destructor stub
+}
+
+void ofxSkeletonRecorder::setup(string xmlFilename, ofVideoPlayer * _player){
+	loadXmlFile(xmlFilename);
+	player = _player;
+
+	bPlay = true;
+	bUpdate = false;
+
+	if(player != NULL){
+		int xmlFrames = xml.getNumTags("frame");
+		frameFactor = (double)xmlFrames / (double)player->getTotalNumFrames();
+	}else{
+		frameFactor = 1.;
+	}
+}
+
+void ofxSkeletonRecorder::enableGrabbing(){
+	for(int i=0;i<skeleton.skeletonPoints.size();++i){
+		skeleton.skeletonPoints[i]->registerMouse();
+	}
+}
+
+void ofxSkeletonRecorder::disableGrabbing(){
+	for(int i=0;i<skeleton.skeletonPoints.size();++i){
+		skeleton.skeletonPoints[i]->unregisterMouse();
+	}
+}
+
+void ofxSkeletonRecorder::setGrabbing(bool bGrabbing){
+	if(bGrabbing){
+		enableGrabbing();
+	}else{
+		disableGrabbing();
+	}
 }
 
 void ofxSkeletonRecorder::drawSkeleton(float x, float y){
@@ -68,7 +141,14 @@ void ofxSkeletonRecorder::saveFrameToXml(int frame,int timeMS){
 	xml.popTag();
 }
 
-void ofxSkeletonRecorder::loadFrameFromXml(int frame){
+void ofxSkeletonRecorder::loadFrameFromXml(){
+	if(!bUpdate){
+		return;
+	}else{
+		bUpdate = false;
+	}
+
+	int frame = floor((double)frameCount*frameFactor);
 	xml.pushTag("frame",frame);
 
 	skeleton.head.loadFromXml(xml,"head");
@@ -91,7 +171,8 @@ void ofxSkeletonRecorder::loadFrameFromXml(int frame){
 	xml.popTag();
 }
 
-void ofxSkeletonRecorder::updateFrameToXml(int frame){
+void ofxSkeletonRecorder::updateFrameToXml(){
+	int frame = floor((double)frameCount*frameFactor);
 	xml.pushTag("frame",frame);
 
 	skeleton.head.updateToXml(xml,"head");
@@ -120,5 +201,55 @@ void ofxSkeletonRecorder::saveXmlToFile(string filename){
 
 void ofxSkeletonRecorder::loadXmlFile(string filename){
 	xml.loadFile(filename);
+}
+
+void ofxSkeletonRecorder::play(bool newFrame){
+	if(bPlay){
+		if(player != NULL){
+			if(player->isFrameNew()){
+				frameCount = player->getCurrentFrame();
+				bUpdate = true;
+			}
+		}else if(newFrame){
+			frameCount++;
+			bUpdate = true;
+		}
+	}
+
+	loadFrameFromXml();
+}
+
+void ofxSkeletonRecorder::update(){
+	if(player != NULL){
+		player->idleMovie();
+	}
+}
+
+void ofxSkeletonRecorder::nextFrame(){
+	bPlay = false;
+
+	updateFrameToXml();
+	frameCount++;
+
+	loadFrameFromXml();
+
+	if(player != NULL){
+		player->setPaused(true);
+		player->nextFrame();
+	}
+}
+
+void ofxSkeletonRecorder::prevFrame(){
+	bPlay = false;
+
+	updateFrameToXml();
+	frameCount--;
+
+	loadFrameFromXml();
+
+	if(player != NULL){
+		player->setPaused(true);
+		player->previousFrame();
+	}
 }
 
