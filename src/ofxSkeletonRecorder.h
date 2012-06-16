@@ -12,9 +12,9 @@
 #include "ofxXmlSettings.h"
 #include "ofxTangibleHandle.h"
 
-class LimbData : public ofxTangibleHandle{
+class SkeletonPoint : public ofxTangibleHandle{
 public:
-	LimbData(){
+	SkeletonPoint(){
 		bFound = false;
 		setup(0,0,10,10);
 		drawType = TANGIBLE_DRAW_AS_CIRCLE;
@@ -60,45 +60,45 @@ protected:
 struct SkeletonData{
 
 	SkeletonData(){
-		limbs.push_back(&head);
+		skeletonPoints.push_back(&head);
 		head.color.set(255,0,0);
 
-		limbs.push_back(&leftUpperTorso);
+		skeletonPoints.push_back(&leftUpperTorso);
 		leftUpperTorso.color.set(0,255,255);
-		limbs.push_back(&leftElbow);
+		skeletonPoints.push_back(&leftElbow);
 		leftElbow.color.set(0,255,0);
-		limbs.push_back(&leftHand);
+		skeletonPoints.push_back(&leftHand);
 		leftHand.color.set(255,0,0);
 
-		limbs.push_back(&rightUpperTorso);
+		skeletonPoints.push_back(&rightUpperTorso);
 		rightUpperTorso.color.set(0,255,255);
-		limbs.push_back(&rightElbow);
+		skeletonPoints.push_back(&rightElbow);
 		rightElbow.color.set(0,255,0);
-		limbs.push_back(&rightHand);
+		skeletonPoints.push_back(&rightHand);
 		rightHand.color.set(255,0,0);
 
-		limbs.push_back(&leftLowerTorso);
+		skeletonPoints.push_back(&leftLowerTorso);
 		leftLowerTorso.color.set(0,255,255);
-		limbs.push_back(&leftKnee);
+		skeletonPoints.push_back(&leftKnee);
 		leftKnee.color.set(0,255,0);
-		limbs.push_back(&leftFoot);
+		skeletonPoints.push_back(&leftFoot);
 		leftFoot.color.set(255,0,0);
 
-		limbs.push_back(&rightLowerTorso);
+		skeletonPoints.push_back(&rightLowerTorso);
 		rightLowerTorso.color.set(0,255,255);
-		limbs.push_back(&rightKnee);
+		skeletonPoints.push_back(&rightKnee);
 		rightKnee.color.set(0,255,0);
-		limbs.push_back(&rightFoot);
+		skeletonPoints.push_back(&rightFoot);
 		rightFoot.color.set(255,0,0);
 	}
 
-	LimbData head;
-	LimbData leftUpperTorso, leftElbow, leftHand;
-	LimbData rightUpperTorso, rightElbow, rightHand;
-	LimbData leftLowerTorso, leftKnee, leftFoot;
-	LimbData rightLowerTorso, rightKnee, rightFoot;
+	SkeletonPoint head;
+	SkeletonPoint leftUpperTorso, leftElbow, leftHand;
+	SkeletonPoint rightUpperTorso, rightElbow, rightHand;
+	SkeletonPoint leftLowerTorso, leftKnee, leftFoot;
+	SkeletonPoint rightLowerTorso, rightKnee, rightFoot;
 
-	vector<LimbData*> limbs;
+	vector<SkeletonPoint*> skeletonPoints;
 };
 
 class ofxSkeletonRecorder {
@@ -111,14 +111,14 @@ public:
 	}
 
 	void enableGrabbing(){
-		for(int i=0;i<skeleton.limbs.size();++i){
-			skeleton.limbs[i]->registerMouse();
+		for(int i=0;i<skeleton.skeletonPoints.size();++i){
+			skeleton.skeletonPoints[i]->registerMouse();
 		}
 	}
 
 	void disableGrabbing(){
-		for(int i=0;i<skeleton.limbs.size();++i){
-			skeleton.limbs[i]->unregisterMouse();
+		for(int i=0;i<skeleton.skeletonPoints.size();++i){
+			skeleton.skeletonPoints[i]->unregisterMouse();
 		}
 	}
 
