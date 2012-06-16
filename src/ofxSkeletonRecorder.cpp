@@ -46,7 +46,7 @@ SkeletonData::SkeletonData(){
 //================= SKELETON RECORDER ===================
 
 ofxSkeletonRecorder::ofxSkeletonRecorder() {
-	bPlay = true;
+	bUsedAsPlayer = bPlay = false;
 	bUpdate = false;
 }
 
@@ -54,12 +54,14 @@ ofxSkeletonRecorder::~ofxSkeletonRecorder() {
 	// TODO Auto-generated destructor stub
 }
 
-void ofxSkeletonRecorder::setup(string xmlFilename, ofVideoPlayer * _player){
+void ofxSkeletonRecorder::setupForPlayback(string xmlFilename, ofVideoPlayer * _player){
+	bUsedAsPlayer = bPlay = true;
+	bUpdate = false;
+	frameOffset = 0;
+
 	loadXmlFile(xmlFilename);
 	player = _player;
-
-	bPlay = true;
-	bUpdate = false;
+	firstFrame();
 
 	if(player != NULL){
 		int xmlFrames = xml.getNumTags("frame");
@@ -148,7 +150,7 @@ void ofxSkeletonRecorder::loadFrameFromXml(){
 		bUpdate = false;
 	}
 
-	int frame = floor((double)frameCount*frameFactor);
+	int frame = getFrameCountInUse();
 	xml.pushTag("frame",frame);
 
 	skeleton.head.loadFromXml(xml,"head");
@@ -172,7 +174,7 @@ void ofxSkeletonRecorder::loadFrameFromXml(){
 }
 
 void ofxSkeletonRecorder::updateFrameToXml(){
-	int frame = floor((double)frameCount*frameFactor);
+	int frame = getFrameCountInUse();
 	xml.pushTag("frame",frame);
 
 	skeleton.head.updateToXml(xml,"head");
@@ -196,11 +198,18 @@ void ofxSkeletonRecorder::updateFrameToXml(){
 }
 
 void ofxSkeletonRecorder::saveXmlToFile(string filename){
+	if(bUsedAsPlayer){
+		if(!bPlay)
+			updateFrameToXml();
+		xml.setValue("frameOffset",frameOffset);
+	}
 	xml.saveFile(filename);
 }
 
 void ofxSkeletonRecorder::loadXmlFile(string filename){
 	xml.loadFile(filename);
+	frameOffset = xml.getValue("frameOffset",0);
+	startFrame = xml.getValue("startFrame",0);
 }
 
 void ofxSkeletonRecorder::play(bool newFrame){
@@ -226,10 +235,13 @@ void ofxSkeletonRecorder::update(){
 }
 
 void ofxSkeletonRecorder::nextFrame(){
+	if(!bPlay){
+		updateFrameToXml();
+	}
 	bPlay = false;
 
-	updateFrameToXml();
 	frameCount++;
+	bUpdate = true;
 
 	loadFrameFromXml();
 
@@ -240,16 +252,33 @@ void ofxSkeletonRecorder::nextFrame(){
 }
 
 void ofxSkeletonRecorder::prevFrame(){
+	if(!bPlay){
+		updateFrameToXml();
+	}
 	bPlay = false;
 
-	updateFrameToXml();
 	frameCount--;
+	bUpdate = true;
 
 	loadFrameFromXml();
 
 	if(player != NULL){
 		player->setPaused(true);
 		player->previousFrame();
+	}
+}
+
+void ofxSkeletonRecorder::firstFrame(){
+	frameCount = startFrame;
+	if(player!=NULL){
+		player->setFrame(startFrame);
+	}
+}
+
+void ofxSkeletonRecorder::setPaused(bool pause){
+	bPlay = !pause;
+	if(player!=NULL){
+		player->setPaused(pause);
 	}
 }
 

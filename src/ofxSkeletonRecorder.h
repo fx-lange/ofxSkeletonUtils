@@ -37,7 +37,7 @@ public:
 		return skeleton;
 	}
 
-	void setup(string xmlFilename, ofVideoPlayer * player = NULL);
+	void setupForPlayback(string xmlFilename, ofVideoPlayer * player = NULL);
 
 	void enableGrabbing();
 	void disableGrabbing();
@@ -60,8 +60,33 @@ public:
 	void update();
 	void nextFrame();
 	void prevFrame();
+
+	void incFrameOffset(){
+		frameOffset++;
+	}
+
+	void decFrameOffset(){
+		frameOffset--;
+	}
+
+	int getFrameOffset(){
+		return frameOffset;
+	}
+
+	void setStartFrame(int _startFrame){
+		startFrame = _startFrame;
+		xml.setValue("startFrame",startFrame);
+	}
+
 	void setPaused(bool pause);
 	void updateFrameToXml();
+	int getFrameCountInUse(){
+		return floor((double)frameCount*frameFactor) + frameOffset;
+	}
+	int getFrameCount(){
+		return frameCount;
+	}
+	void firstFrame();
 
 protected:
 	SkeletonData skeleton;
@@ -71,8 +96,10 @@ protected:
 	//player
 	ofVideoPlayer * player;
 	double frameFactor;
-	bool bPlay, bUpdate;
+	bool bPlay, bUpdate, bUsedAsPlayer;
 	int frameCount;
+	int frameOffset;
+	int startFrame;
 };
 
 #endif /* OFXSKELETONRECORDER_H_ */
