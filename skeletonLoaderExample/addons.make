@@ -1,0 +1,3 @@
+ofxSkeletonRecorder
+ofxXmlSettings
+ofxTangibleUI
