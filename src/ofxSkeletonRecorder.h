@@ -13,20 +13,8 @@
 #include "ofMain.h"
 #include "ofxXmlSettings.h"
 #include "ofxSkeletonPoint.h"
+#include "SkeletonData.h"
 
-
-struct SkeletonData{
-
-	SkeletonData();
-
-	SkeletonPoint head;
-	SkeletonPoint leftUpperTorso, leftElbow, leftHand;
-	SkeletonPoint rightUpperTorso, rightElbow, rightHand;
-	SkeletonPoint leftLowerTorso, leftKnee, leftFoot;
-	SkeletonPoint rightLowerTorso, rightKnee, rightFoot;
-
-	vector<SkeletonPoint*> skeletonPoints;
-};
 
 class ofxSkeletonRecorder {
 public:
