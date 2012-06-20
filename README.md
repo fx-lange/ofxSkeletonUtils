@@ -7,3 +7,7 @@ dependencies
 ============
 ofxTangibleUI - to change recorded skeleton points
 
+ToDo
+============
+ofxSkeletonRecorder still contains input/player members and methods => clean up
+
