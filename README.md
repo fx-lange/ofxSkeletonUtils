@@ -10,4 +10,4 @@ ofxTangibleUI - to change recorded skeleton points
 ToDo
 ============
 ofxSkeletonRecorder still contains input/player members and methods => clean up
-
+perhaps include recorder into inputmanager and rename it - ofxCvInputManager to ofxCvInputControl...

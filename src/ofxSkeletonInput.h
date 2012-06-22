@@ -59,7 +59,13 @@ public:
 	void firstFrame();
 
 	void drawDataLayer(float x = 0, float y = 0);
+	SkeletonData * getSkeleton(){
+		return &skeleton;
+	}
 
+	void enableGrabbing();
+	void disableGrabbing();
+	void setGrabbing(bool bGrabbing);
 
 protected:
 	SkeletonData skeleton;
@@ -71,7 +77,7 @@ protected:
 	double frameFactor;
 	bool bUpdate, bUsedAsPlayer;
 	int frameOffset;
-	int startFrame;
+	int startFrame, endFrame;
 };
 
 #endif /* OFXSKELETONINPUT_H_ */

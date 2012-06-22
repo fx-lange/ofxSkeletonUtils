@@ -15,6 +15,8 @@ struct SkeletonData{
 	SkeletonData(){
 		skeletonPoints.push_back(&head);
 		head.color.set(255,0,0);
+		skeletonPoints.push_back(&neck);
+		neck.color.set(180,0,0);
 
 		skeletonPoints.push_back(&leftUpperTorso);
 		leftUpperTorso.color.set(0,255,255);
@@ -45,7 +47,7 @@ struct SkeletonData{
 		rightFoot.color.set(255,0,0);
 	}
 
-	SkeletonPoint head;
+	SkeletonPoint head,neck;
 	SkeletonPoint leftUpperTorso, leftElbow, leftHand;
 	SkeletonPoint rightUpperTorso, rightElbow, rightHand;
 	SkeletonPoint leftLowerTorso, leftKnee, leftFoot;

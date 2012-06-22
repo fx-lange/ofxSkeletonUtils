@@ -39,6 +39,7 @@ void ofxSkeletonInput::loadXmlFile(string filename){
 	xml.loadFile(filename);
 	frameOffset = xml.getValue("frameOffset",0);
 	startFrame = xml.getValue("startFrame",0);
+	endFrame = xml.getValue("endFrame",200);
 }
 
 void ofxSkeletonInput::saveXmlToFile(string filename){
@@ -51,12 +52,16 @@ void ofxSkeletonInput::saveXmlToFile(string filename){
 }
 
 void ofxSkeletonInput::update(){
-	if(bUsePlayer){ //beim übertragen in ein boolean usePlayer umwandeln
+	if(bUsePlayer){
 		ofxCvVideoInput::update();
 	}
 }
 
 bool ofxSkeletonInput::useFrame(){
+	if(getFrameCountInUse()>endFrame){
+		setPaused(true);
+	}
+	bUpdate = false;
 	if(bPlay){
 		if(bUsePlayer){
 			if(player.isFrameNew()){
@@ -102,8 +107,6 @@ void ofxSkeletonInput::drawDataLayer(float x, float y){
 void ofxSkeletonInput::loadFrameFromXml(){
 	if(!bUpdate){
 		return;
-	}else{
-		bUpdate = false;
 	}
 
 	int frame = getFrameCountInUse();
@@ -192,5 +195,25 @@ void ofxSkeletonInput::firstFrame(){
 	loadFrameFromXml();
 	if(bUsePlayer){
 		player.setFrame(startFrame);
+	}
+}
+
+void ofxSkeletonInput::enableGrabbing(){
+	for(int i=0;i<skeleton.skeletonPoints.size();++i){
+		skeleton.skeletonPoints[i]->registerMouse();
+	}
+}
+
+void ofxSkeletonInput::disableGrabbing(){
+	for(int i=0;i<skeleton.skeletonPoints.size();++i){
+		skeleton.skeletonPoints[i]->unregisterMouse();
+	}
+}
+
+void ofxSkeletonInput::setGrabbing(bool bGrabbing){
+	if(bGrabbing){
+		enableGrabbing();
+	}else{
+		disableGrabbing();
 	}
 }
