@@ -60,6 +60,7 @@ void ofxSkeletonInput::update(){
 bool ofxSkeletonInput::useFrame(){
 	if(getFrameCountInUse()>endFrame){
 		setPaused(true);
+//		ofSaveFrame(); //TODO grabScreen() crashes - PBO conflict
 	}
 	bUpdate = false;
 	if(bPlay){

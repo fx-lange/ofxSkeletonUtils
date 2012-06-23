@@ -9,6 +9,7 @@
 #define OFXSKELETONCOMPARATOR_H_
 
 #include "SkeletonData.h"
+#include "ofxGui.h"
 
 class ofxSkeletonComparator {
 public:
@@ -32,15 +33,17 @@ public:
 	SkeletonData * skeleton;
 	int comparisons;
 	int countErrors;
-	float errorThreshold;
 
 	int errorsPerRun, comparisonsPerRun, errorDistancePerRun;
+
+	ofxPanel panel;
+	ofxFloatSlider maxErrorDistance;
+	ofxToggle notFoundEQError;
 
 	ofxSkeletonComparator();
 	virtual ~ofxSkeletonComparator();
 
-	void setup(float _errorThreshold){
-		errorThreshold = _errorThreshold;
+	void setup(){
 		reset();
 	}
 
@@ -59,13 +62,12 @@ public:
 		errorDistancePerRun += error;
 
 		stringstream stream;
-		stream << "    Comparisons   : " << comparisons << endl;
-		stream << "       Errors     : " << countErrors << endl;
-		stream << "AVG Error Distance: " << error / float(comparisons) << endl;
-		stream << " Comparisons Run  : " << comparisonsPerRun << endl;
-		stream << "   Errors Run     : " << errorsPerRun << endl;
-		stream << "Error Distance Run: " << errorDistancePerRun << endl;
-		stream << " AVG  Distance Run: " << errorDistancePerRun / float(comparisonsPerRun) << endl;
+		stream << "Errors            : " << countErrors << endl;
+		stream << "Comparisons       : " << comparisons << endl;
+		stream << "AVG Error         : " << error / float(comparisons) << endl;
+		stream << "Errors Run        : " << errorsPerRun << endl;
+		stream << "Comparisons Run   : " << comparisonsPerRun << endl;
+		stream << "AVG Error Run     : " << errorDistancePerRun / float(comparisonsPerRun) << endl;
 
 
 		comparisons = 0;
@@ -148,18 +150,22 @@ public:
 
 protected:
 	bool compare(ofPoint * p, int index, string bez){
-		if(p == NULL || skeleton == NULL || !skeleton->skeletonPoints[index]->bFound){
+		float errorDist = 0.f;
+		if(p == NULL && notFoundEQError){
+			errorDist = maxErrorDistance + 1.f;
+		}else if(p == NULL || skeleton == NULL || !skeleton->skeletonPoints[index]->bFound){
 			//0 or max?
 			errorDistance[index] = 0.f;
 			return false;
+		}else{
+			errorDist = p->distance(*skeleton->skeletonPoints[index]);
 		}
 
-		float errorDist = p->distance(*skeleton->skeletonPoints[index]);
 		errorDistance[index] = errorDist;
 
 		comparisons++;
 
-		if(errorDist > errorThreshold){
+		if(errorDist > maxErrorDistance){
 			ofLog(OF_LOG_WARNING,bez+": "+ofToString(errorDist));
 			countErrors++;
 			return true;

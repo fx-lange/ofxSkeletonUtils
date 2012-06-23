@@ -56,6 +56,9 @@ public:
 	int getFrameCount(){
 		return frameCount;
 	}
+	int getFrames(){
+		return endFrame;
+	}
 	void firstFrame();
 
 	void drawDataLayer(float x = 0, float y = 0);

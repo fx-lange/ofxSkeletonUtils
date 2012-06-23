@@ -12,6 +12,9 @@ ofxSkeletonComparator::ofxSkeletonComparator() {
 		errorDistance.push_back(0.f);
 	}
 	comparisons = 0;
+	panel.setup("comparator");
+	panel.add(maxErrorDistance.setup("max error",50,10,100));
+	panel.add(notFoundEQError.setup("not found eq error",false));
 }
 
 ofxSkeletonComparator::~ofxSkeletonComparator() {
