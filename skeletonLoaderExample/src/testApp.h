@@ -6,7 +6,7 @@
 #include "ofMain.h"
 #include "ofxSkeletonRecorder.h"
 
-class skeletonLoaderApp : public ofBaseApp{
+class videoInputTestApp : public ofBaseApp{
 
 public:
 	void setup();

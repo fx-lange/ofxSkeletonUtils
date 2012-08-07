@@ -1,7 +1,7 @@
 #include "testApp.h"
 
 //--------------------------------------------------------------
-void skeletonLoaderApp::setup() {
+void videoInputTestApp::setup() {
 	ofBackground(0, 0, 0);
 
 	startFrame = 10;
@@ -15,7 +15,7 @@ void skeletonLoaderApp::setup() {
 
 
 //--------------------------------------------------------------
-void skeletonLoaderApp::update(){
+void videoInputTestApp::update(){
 	skeletonRecorder.update();
 
 	if(eNextFrame){
@@ -30,7 +30,7 @@ void skeletonLoaderApp::update(){
 }
 
 //--------------------------------------------------------------
-void skeletonLoaderApp::draw(){
+void videoInputTestApp::draw(){
 
 	player.draw(0,0);
 	skeletonRecorder.drawSkeleton();
@@ -49,7 +49,7 @@ void skeletonLoaderApp::draw(){
 }
 
 //--------------------------------------------------------------
-void skeletonLoaderApp::keyPressed(int key){
+void videoInputTestApp::keyPressed(int key){
 
 	switch (key) {
 		case 's':
@@ -89,36 +89,36 @@ void skeletonLoaderApp::keyPressed(int key){
 
 
 //--------------------------------------------------------------
-void skeletonLoaderApp::keyReleased(int key){
+void videoInputTestApp::keyReleased(int key){
 
 }
 
 //--------------------------------------------------------------
-void skeletonLoaderApp::mouseMoved(int x, int y ){
+void videoInputTestApp::mouseMoved(int x, int y ){
 
 }
 
 //--------------------------------------------------------------
-void skeletonLoaderApp::mouseDragged(int x, int y, int button){
+void videoInputTestApp::mouseDragged(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void skeletonLoaderApp::mousePressed(int x, int y, int button){
+void videoInputTestApp::mousePressed(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void skeletonLoaderApp::mouseReleased(int x, int y, int button){
+void videoInputTestApp::mouseReleased(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void skeletonLoaderApp::windowResized(int w, int h){
+void videoInputTestApp::windowResized(int w, int h){
 
 }
 
-void skeletonLoaderApp::exit(){
+void videoInputTestApp::exit(){
 	player.close();
 }
 
