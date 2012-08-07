@@ -29,6 +29,10 @@ public:
 	//13 rf
 
 	vector<float> errorDistance;
+	vector<float> avgErrorDistancePerJoint;
+	vector<int> compareCountsPerJoint;
+	vector<int> errorCountsPerJoint;
+	vector<string> labels;
 
 	SkeletonData * skeleton;
 	int comparisons;
@@ -49,6 +53,12 @@ public:
 
 	void reset(){
 		errorsPerRun = comparisonsPerRun = errorDistancePerRun = 0;
+		for(int i=0;i<14;++i){
+			errorDistance[i] = 0.f;
+			avgErrorDistancePerJoint[i] =  0.f;
+			compareCountsPerJoint[i] = 0;
+			errorCountsPerJoint[i] = 0;
+		}
 	}
 
 	string printResults(){
@@ -67,12 +77,21 @@ public:
 		stream << "AVG Error         : " << error / float(comparisons) << endl;
 		stream << "Errors Run        : " << errorsPerRun << endl;
 		stream << "Comparisons Run   : " << comparisonsPerRun << endl;
+		stream << "Hit Ratio         : " << (1-(float)errorsPerRun/(float)comparisonsPerRun)*100 << "%" << endl;
 		stream << "AVG Error Run     : " << errorDistancePerRun / float(comparisonsPerRun) << endl;
 
 
 		comparisons = 0;
 		countErrors = 0;
 
+		return stream.str();
+	}
+
+	string printPerJointResults(){
+		stringstream stream;
+		for(unsigned int i=0;i<errorDistance.size();++i){
+			stream << labels[i] << " ; " << ofToString(avgErrorDistancePerJoint[i]/(float)compareCountsPerJoint[i]) << " ; "<< errorCountsPerJoint[i] << endl;
+		}
 		return stream.str();
 	}
 
@@ -156,18 +175,22 @@ protected:
 		}else if(p == NULL || skeleton == NULL || !skeleton->skeletonPoints[index]->bFound){
 			//0 or max?
 			errorDistance[index] = 0.f;
+			ofLog(OF_LOG_WARNING,bez+": not found!");
 			return false;
 		}else{
 			errorDist = p->distance(*skeleton->skeletonPoints[index]);
 		}
 
 		errorDistance[index] = errorDist;
+		avgErrorDistancePerJoint[index] += errorDist;
+		compareCountsPerJoint[index]++;
 
 		comparisons++;
 
 		if(errorDist > maxErrorDistance){
 			ofLog(OF_LOG_WARNING,bez+": "+ofToString(errorDist));
 			countErrors++;
+			errorCountsPerJoint[index]++;
 			return true;
 		}else{
 			return false;
