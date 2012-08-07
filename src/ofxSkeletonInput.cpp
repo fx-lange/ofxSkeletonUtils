@@ -39,7 +39,7 @@ void ofxSkeletonInput::loadXmlFile(string filename){
 	xml.loadFile(filename);
 	frameOffset = xml.getValue("frameOffset",0);
 	startFrame = xml.getValue("startFrame",0);
-	endFrame = xml.getValue("endFrame",200);
+	endFrame = xml.getValue("endFrame",600);
 }
 
 void ofxSkeletonInput::saveXmlToFile(string filename){

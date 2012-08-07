@@ -1,9 +1,5 @@
 /*
  * ofxSkeletonRecorder.h
- *
- *  Created on: Jun 14, 2012
- *      Author: fx-lange
- *
  *	TODO refactor to recorder and player!
  */
 
