@@ -5,9 +5,12 @@
 SkeletonPoint::SkeletonPoint(){
 	ofxTangibleHandle();
 	bFound = false;
-	setup(0,0,10,10);
 	drawType = TANGIBLE_DRAW_AS_CIRCLE;
-	unregisterMouse();
+}
+
+void SkeletonPoint::setup(){
+	ofxTangibleHandle::setup(0,0,10,10);
+	disableGrabbing();
 }
 
 void SkeletonPoint::draw(){

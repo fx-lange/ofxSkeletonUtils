@@ -20,7 +20,8 @@ public:
 	virtual void setup(string videoFilename, string xmlFilename, bool useVideoPlayer = true);
 
 	void loadXmlFile(string filename);
-	void saveXmlToFile(string filename);
+	void saveXmlToFile(string filename = "");
+
 	void loadFrameFromXml();
 
 	ofxXmlSettings & getXml(){
@@ -75,7 +76,7 @@ protected:
 	string filename;
 	ofxXmlSettings xml;
 
-	bool bUsePlayer;
+	bool bUsePlayer; //TODO naming (vs bUsedAsPlayer)
 	int frameCount;
 	double frameFactor;
 	bool bUpdate, bUsedAsPlayer;

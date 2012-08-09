@@ -11,7 +11,6 @@
 #include "ofxSkeletonPoint.h"
 
 struct SkeletonData{
-
 	SkeletonData(){
 		skeletonPoints.push_back(&head);
 		head.color.set(255,0,0);
@@ -45,6 +44,28 @@ struct SkeletonData{
 		rightKnee.color.set(0,255,0);
 		skeletonPoints.push_back(&rightFoot);
 		rightFoot.color.set(255,0,0);
+
+		PointContainer::iterator it;
+		for(it = skeletonPoints.begin();it != skeletonPoints.end();++it){
+			SkeletonPoint * sp = *it;
+			sp->setup();
+		}
+	}
+
+	void enableGrabbing(){
+		PointContainer::iterator it;
+		for(it = skeletonPoints.begin();it != skeletonPoints.end();++it){
+			SkeletonPoint * sp = *it;
+			sp->enableGrabbing();
+		}
+	}
+
+	void disableGrabbing(){
+		PointContainer::iterator it;
+		for(it = skeletonPoints.begin();it != skeletonPoints.end();++it){
+			SkeletonPoint * sp = *it;
+			sp->disableGrabbing();
+		}
 	}
 
 	SkeletonPoint head,neck;
@@ -53,7 +74,8 @@ struct SkeletonData{
 	SkeletonPoint leftLowerTorso, leftKnee, leftFoot;
 	SkeletonPoint rightLowerTorso, rightKnee, rightFoot;
 
-	vector<SkeletonPoint*> skeletonPoints;
+	typedef vector<SkeletonPoint*> PointContainer;
+	PointContainer skeletonPoints;
 };
 
 

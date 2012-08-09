@@ -38,15 +38,11 @@ void ofxSkeletonRecorder::setupForPlayback(string xmlFilename, ofVideoPlayer * _
 }
 
 void ofxSkeletonRecorder::enableGrabbing(){
-	for(int i=0;i<skeleton.skeletonPoints.size();++i){
-		skeleton.skeletonPoints[i]->registerMouse();
-	}
+	skeleton.enableGrabbing();
 }
 
 void ofxSkeletonRecorder::disableGrabbing(){
-	for(int i=0;i<skeleton.skeletonPoints.size();++i){
-		skeleton.skeletonPoints[i]->unregisterMouse();
-	}
+	skeleton.disableGrabbing();
 }
 
 void ofxSkeletonRecorder::setGrabbing(bool bGrabbing){

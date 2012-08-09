@@ -17,6 +17,8 @@ public:
 
 	SkeletonPoint();
 
+	virtual void setup();
+
 	virtual void draw();
 	virtual void mouseReleased(ofMouseEventArgs & event);
 
